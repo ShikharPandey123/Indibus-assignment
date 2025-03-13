@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
 import axios from 'axios';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// ✅ Register the Filler plugin
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 export default function ForecastChart({ city }) {
     const [forecastData, setForecastData] = useState(null);
@@ -34,9 +35,9 @@ export default function ForecastChart({ city }) {
                                 label: `Temperature in ${city} (°C)`,
                                 data: temperatures,
                                 borderColor: "rgba(75,192,192,1)",
-                                backgroundColor: "rgba(75,192,192,0.2)",
+                                backgroundColor: "rgba(75,192,192,0.2)", // ✅ Uses Filler plugin for smooth shading
                                 borderWidth: 2,
-                                fill: true,
+                                fill: true, // ✅ Now this works properly
                                 tension: 0.4, // Smooth curves
                             },
                         ],
