@@ -1,52 +1,38 @@
 import { useState } from "react";
 import WeatherWidget from "../components/WeatherWidget";
+import ForecastChart from "../components/ForecastChart";
+import AirQualityWidget from "../components/AirQualityWidget";
 import NewsWidget from "../components/NewsWidget";
+import CityAutocomplete from "../components/CityAutocomplete";
 import WidgetSelector from "../components/WidgetSelector";
+import SunriseSunset from "../components/SunriseSunset";
 
 export default function Home() {
-    const [selectedWidgets, setSelectedWidgets] = useState({ weather: true, news: true });
-    const [selectedCity, setSelectedCity] = useState("New York"); // Default city
+    const [selectedCity, setSelectedCity] = useState("New York");
+    const [selectedWidgets, setSelectedWidgets] = useState({
+        weather: true,
+        forecast: true,
+        airQuality: true,
+        news: true,
+        sunriseSunset: true,
+    });
 
     return (
-        <div className="flex min-h-screen bg-gray-900 text-white">
-            <main className="flex-1 p-6">
-                <div className="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h1 className="text-3xl font-bold text-center mb-6">🌞 Custom Dashboard</h1>
-                    
-                    {/* City Selector */}
-                    <div className="flex justify-center items-center mb-4">
-                        <label className="mr-2 text-lg">Select City:</label>
-                        <select 
-                            value={selectedCity} 
-                            onChange={(e) => setSelectedCity(e.target.value)}
-                            className="p-2 bg-gray-700 text-white rounded-lg"
-                        >
-                            <option value="New York">New York</option>
-                            <option value="London">London</option>
-                            <option value="Tokyo">Tokyo</option>
-                            <option value="Paris">Paris</option>
-                            <option value="Sydney">Sydney</option>
-                        </select>
-                    </div>
+        <div className="min-h-screen bg-gray-900 text-white p-6 flex items-center justify-center">
+            <div className="max-w-5xl w-full bg-black/30 backdrop-blur-lg p-8 rounded-xl shadow-xl">
+                <h1 className="text-3xl font-bold text-center mb-4">🌍 Weather & News Dashboard</h1>
+                <CityAutocomplete setSelectedCity={setSelectedCity} />
 
-                    {/* Widget Selector */}
-                    <WidgetSelector selectedWidgets={selectedWidgets} setSelectedWidgets={setSelectedWidgets} />
-                    
-                    {/* Widgets Display */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        {selectedWidgets.weather && (
-                            <div className="bg-gray-700 p-4 rounded-lg shadow-md">
-                                <WeatherWidget city={selectedCity} />
-                            </div>
-                        )}
-                        {selectedWidgets.news && (
-                            <div className="bg-gray-700 p-4 rounded-lg shadow-md">
-                                <NewsWidget query="technology" />
-                            </div>
-                        )}
-                    </div>
+                <WidgetSelector selectedWidgets={selectedWidgets} setSelectedWidgets={setSelectedWidgets} />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    {selectedWidgets.weather && <WeatherWidget city={selectedCity} />}
+                    {selectedWidgets.forecast && <ForecastChart city={selectedCity} />}
+                    {selectedWidgets.airQuality && <AirQualityWidget city={selectedCity} />}
+                    {selectedWidgets.news && <NewsWidget query={selectedCity} />}
+                    {selectedWidgets.sunriseSunset && <SunriseSunset city={selectedCity} />}
                 </div>
-            </main>
+            </div>
         </div>
     );
-} 
+}

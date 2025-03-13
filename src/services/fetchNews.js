@@ -1,14 +1,29 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'da52e5299f224169bb6d20bc50dc942f';
-const BASE_URL = 'https://newsapi.org/v2/everything';
+const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
+const BASE_URL = "https://newsapi.org/v2/top-headlines"; 
 
 export async function fetchNews(query) {
     try {
-        const response = await axios.get(`${BASE_URL}?q=${query}&from=2025-02-11&sortBy=publishedAt&apiKey=${API_KEY}`);
-        return response.data.articles;
+        if (!API_KEY) {
+            throw new Error("API key is missing. Check your .env file.");
+        }
+
+        const response = await axios.get(BASE_URL, {
+            params: {
+                q: query,
+                from: new Date().toISOString().split("T")[0], // Use today's date
+                sortBy: "publishedAt",
+                apiKey: API_KEY
+            },
+            headers: {
+                "Accept": "application/json",
+            }
+        });
+        console.log("API Key:", API_KEY);
+        return response.data.articles || [];
     } catch (error) {
-        console.error("Error fetching news data:", error);
+        console.error("❌ Error fetching news data:", error.response?.data || error.message);
         return [];
     }
 }
