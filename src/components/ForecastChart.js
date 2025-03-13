@@ -44,7 +44,7 @@ export default function ForecastChart({ city }) {
         return <p className="text-center text-gray-400">Loading forecast...</p>;
     }
 
-    // Extract data
+    // Extract forecast data
     const labels = forecastData.list.map((entry) =>
         new Date(entry.dt * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     );
@@ -91,8 +91,8 @@ export default function ForecastChart({ city }) {
     };
 
     return (
-        <div className="p-4 bg-gray-800 text-white rounded-lg">
-            <h2 className="text-lg font-bold">📊 Weather Forecast</h2>
+        <div className="p-4 bg-gray-800 text-white rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold">📊 5-Day Forecast</h2>
             <div className="relative" style={{ height: "300px" }}>
                 <Line data={data} options={options} />
             </div>
