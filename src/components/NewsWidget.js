@@ -14,6 +14,7 @@ export default function NewsWidget({ query }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
+    // Fetch news articles
     useEffect(() => {
         async function fetchNews() {
             setLoading(true);
@@ -51,19 +52,25 @@ export default function NewsWidget({ query }) {
         setFilteredArticles(filtered);
     }, [keyword, sortOrder, articles]);
 
-    // Save to "Read Later" list
+    // Save to "Read Later" list (with Local Storage)
+    useEffect(() => {
+        const savedArticles = JSON.parse(localStorage.getItem("readLater")) || [];
+        setReadLater(savedArticles);
+    }, []);
+
     const handleReadLater = (article) => {
-        if (!readLater.some((saved) => saved.url === article.url)) {
-            setReadLater([...readLater, article]);
-        }
+        const updatedList = [...readLater, article];
+        setReadLater(updatedList);
+        localStorage.setItem("readLater", JSON.stringify(updatedList));
     };
 
-    // Remove from "Read Later"
     const handleRemoveReadLater = (url) => {
-        setReadLater(readLater.filter((article) => article.url !== url));
+        const updatedList = readLater.filter((article) => article.url !== url);
+        setReadLater(updatedList);
+        localStorage.setItem("readLater", JSON.stringify(updatedList));
     };
 
-    if (loading) return <p className="text-center text-gray-400">Loading news...</p>;
+    if (loading) return <p className="text-center text-gray-400 animate-pulse">Loading news...</p>;
 
     if (error) {
         return (
@@ -75,8 +82,8 @@ export default function NewsWidget({ query }) {
     }
 
     return (
-        <div className="p-6 bg-black/30 backdrop-blur-lg text-white rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">📰 Latest News about {query}</h2>
+        <div className="p-6 bg-gray-900/50 backdrop-blur-lg text-white rounded-lg shadow-lg border border-gray-700">
+            <h2 className="text-2xl font-bold text-center mb-4">📰 Latest News about {query}</h2>
 
             {/* Search, Sorting & Category Selection */}
             <div className="mb-4 flex flex-col md:flex-row gap-2">
@@ -85,12 +92,12 @@ export default function NewsWidget({ query }) {
                     placeholder="Filter by keyword..."
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    className="w-full p-2 text-black rounded-md"
+                    className="w-full p-3 text-black rounded-lg border border-gray-400 focus:outline-none"
                 />
                 <select
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
-                    className="p-2 bg-gray-700 text-white rounded-md"
+                    className="p-3 bg-gray-700 text-white rounded-lg"
                 >
                     <option value="latest">Sort by Latest</option>
                     <option value="oldest">Sort by Oldest</option>
@@ -98,7 +105,7 @@ export default function NewsWidget({ query }) {
                 <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="p-2 bg-gray-700 text-white rounded-md"
+                    className="p-3 bg-gray-700 text-white rounded-lg"
                 >
                     {categories.map((cat) => (
                         <option key={cat} value={cat}>
@@ -109,22 +116,22 @@ export default function NewsWidget({ query }) {
             </div>
 
             {/* News Articles */}
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredArticles.length > 0 ? (
                     filteredArticles.map((article, index) => (
-                        <div key={index} className="p-4 bg-gray-900/60 rounded-lg shadow-md">
+                        <div key={index} className="p-4 bg-gray-900/60 rounded-lg shadow-md hover:scale-105 transition-all">
                             <h3 className="text-lg font-semibold">
                                 <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
                                     {article.title}
                                 </a>
                             </h3>
                             <p className="text-sm text-gray-300">{article.description}</p>
-                            <p className="text-xs text-gray-500">Published: {new Date(article.publishedAt).toLocaleString()}</p>
+                            <p className="text-xs text-gray-500">🕒 {new Date(article.publishedAt).toLocaleString()}</p>
                             <button
                                 onClick={() => handleReadLater(article)}
                                 className="mt-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
                             >
-                                Save to Read Later
+                                📌 Save for Later
                             </button>
                         </div>
                     ))
@@ -148,7 +155,7 @@ export default function NewsWidget({ query }) {
                                 onClick={() => handleRemoveReadLater(article.url)}
                                 className="mt-1 p-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
                             >
-                                Remove
+                                ❌ Remove
                             </button>
                         </div>
                     ))}
