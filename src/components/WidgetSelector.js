@@ -1,10 +1,9 @@
-import { FaCloudSun, FaNewspaper, FaChartLine, FaSmog } from "react-icons/fa";
+import { FaCloudSun, FaNewspaper,FaSmog } from "react-icons/fa";
 
 export default function WidgetSelector({ selectedWidgets, setSelectedWidgets }) {
     const widgetIcons = {
         weather: <FaCloudSun className="text-yellow-400 text-lg" />,
         news: <FaNewspaper className="text-blue-400 text-lg" />,
-        forecast: <FaChartLine className="text-green-400 text-lg" />,
         airQuality: <FaSmog className="text-gray-400 text-lg" />,
     };
 

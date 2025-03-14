@@ -1,6 +1,5 @@
 import { useState } from "react";
 import WeatherWidget from "../components/WeatherWidget";
-import ForecastChart from "../components/ForecastChart";
 import AirQualityWidget from "../components/AirQualityWidget";
 import NewsWidget from "../components/NewsWidget";
 import CityAutocomplete from "../components/CityAutocomplete";
@@ -12,7 +11,6 @@ export default function Home() {
     const [selectedCity, setSelectedCity] = useState("New York");
     const [selectedWidgets, setSelectedWidgets] = useState({
         weather: true,
-        forecast: true,
         airQuality: true,
         news: true,
         sunriseSunset: true,
@@ -54,18 +52,6 @@ export default function Home() {
                                 transition={{ duration: 0.4 }}
                             >
                                 <WeatherWidget city={selectedCity} />
-                            </motion.div>
-                        )}
-
-                        {selectedWidgets.forecast && (
-                            <motion.div
-                                key="forecast"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.4, delay: 0.1 }}
-                            >
-                                <ForecastChart city={selectedCity} />
                             </motion.div>
                         )}
 
