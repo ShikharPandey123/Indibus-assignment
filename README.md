@@ -17,7 +17,7 @@ A **feature-rich, fully responsive, and visually stunning** Weather & News Dashb
 ---
 
 ## 🚀 Live Demo  
-🔗 [View Deployed App]([https://your-vercel-deployment-url.com](https://dashboard-app-git-main-shikhar-pandeys-projects-6d0d29b3.vercel.app/))  
+https://dashboard-app-git-main-shikhar-pandeys-projects-6d0d29b3.vercel.app/
 
 ---
 
